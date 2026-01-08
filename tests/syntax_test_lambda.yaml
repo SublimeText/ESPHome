@@ -1,0 +1,102 @@
+# SYNTAX TEST "Packages/ESPHome/YAML (esphome).sublime-syntax"
+# <- source.yaml-esphome comment
+
+
+## Lambda mappings
+
+lambda: return id(uri) == "";
+# <- meta.mapping.key meta.string string.unquoted.plain.out
+#^^^^^ meta.mapping.key meta.string string.unquoted.plain.out
+#      ^ - source.c++
+#       ^^^^^^^^^^^^^^^^^^^^^ source.c++
+
+lambda: 'return id(uri) == "";'
+# <- meta.mapping.key meta.string string.unquoted.plain.out
+#^^^^^ meta.mapping.key meta.string string.unquoted.plain.out
+#      ^^ - source.c++
+#        ^^^^^^^^^^^^^^^^^^^^^ source.c++
+#                             ^ - source.c++
+
+lambda: "return id(uri);"
+# <- meta.mapping.key meta.string string.unquoted.plain.out
+#^^^^^ meta.mapping.key meta.string string.unquoted.plain.out
+#      ^^ - source.c++
+#        ^^^^^^^^^^^^^^^ source.c++
+#                       ^ - source.c++
+
+lambda: |-
+  #     ^ keyword.control.flow.block-scalar.literal
+  #      ^ storage.modifier.chomping-indicator
+   return id(uri);
+  #^^^^^^^^^^^^^^ source.c++
+foo: 1
+# <- - source.c++
+
+
+## Lambda tags
+
+foo: !lambda return id(uri)
+#    ^^^^^^^ meta.property keyword.control.directive.tag
+#            ^^^^^^^^^^^^^^ source.c++
+
+foo: !lambda 'return id(uri)'
+#    ^^^^^^^ meta.property keyword.control.directive.tag
+#            ^ - source.c++
+#             ^^^^^^^^^^^^^^ source.c++
+#                           ^ - source.c++
+
+foo: !lambda "return id(uri)"
+#    ^^^^^^^ meta.property keyword.control.directive.tag
+#            ^ - source.c++
+#             ^^^^^^^^^^^^^^ source.c++
+#                           ^ - source.c++
+
+foo: !lambda |-
+  #  ^^^^^^^ meta.property keyword.control.directive.tag
+  #          ^ keyword.control.flow.block-scalar.literal
+  #           ^ storage.modifier.chomping-indicator
+   const id = id(uri);
+  #^^^^^^^^^^^^^^^^^^^ source.c++
+   return id;
+  #^^^^^^^^^^ source.c++
+foo: 1
+# <- - source.c++
+
+
+## Lambda key with lambda tag
+
+lambda: !lambda return id(uri);
+#       ^^^^^^^ meta.property keyword.control.directive.tag
+#               ^^^^^^^^^^^^^^^ source.c++
+
+lambda: !lambda "return id(uri);"
+#       ^^^^^^^ meta.property keyword.control.directive.tag
+#               ^ - source.c++
+#                ^^^^^^^^^^^^^^^ source.c++
+#                               ^ - source.c++
+
+lambda: !lambda 'return id(uri);'
+#       ^^^^^^^ meta.property keyword.control.directive.tag
+#               ^ - source.c++
+#                ^^^^^^^^^^^^^^^ source.c++
+#                               ^ - source.c++
+
+lambda: !lambda |-
+  #     ^^^^^^^ meta.property keyword.control.directive.tag
+  #             ^ keyword.control.flow.block-scalar.literal
+  #              ^ storage.modifier.chomping-indicator
+   return id(uri);
+  #^^^^^^^^^^^^^^^ source.c++
+foo: 1
+# <- - source.c++
+
+
+## Unterminated
+
+lambda:
+foo: 1
+# <- - source.c++
+
+foo: !lambda
+foo: 1
+# <- - source.c++

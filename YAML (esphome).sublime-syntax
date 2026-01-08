@@ -1,0 +1,107 @@
+%YAML 1.2
+# Extends built-in YAML syntax with support for embedded c++ blocks.
+# The blocks can either be specified using a "lambda" key or "!lambda" tag.
+# See https://esphome.io/guides/yaml/ and https://esphome.io/automations/templates/#config-lambda
+# for more details.
+#
+# Notes:
+# - Single and double-quoted "lambda" keys are not supported.
+# - Code between "yaml-esphome begin" and "yaml-esphome end" tags are additions
+#   relative to the orignal YAML syntax. The rest of the code is copied from
+#   YAML syntax.
+---
+# http://www.sublimetext.com/docs/syntax.html
+name: YAML (esphome)
+scope: source.yaml-esphome
+version: 2
+
+extends: Packages/YAML/YAML.sublime-syntax
+
+contexts:
+  block-pair:
+    - match: ( *)(\?)(?=\s)
+      captures:
+        2: meta.mapping.yaml punctuation.definition.key-value.begin.yaml
+      push: block-key-explicit
+
+    # --- yaml-esphome begin ---
+    - match: (lambda)\s*(:)(?=\s+|$)
+      captures:
+        1: meta.mapping.key.yaml meta.string.yaml string.unquoted.plain.out.yaml
+        2: meta.mapping.yaml punctuation.separator.key-value.mapping.yaml
+      push: lambda-body
+    # --- yaml-esphome end ---
+
+    # Attempt to match plain-out scalars and highlight as "meta.mapping.key",
+    # if followed by a colon
+    - match: '{{_flow_key_out_lookahead}}'
+      push: block-key-implicit
+    - match: :(?=\s)
+      scope: meta.mapping.yaml punctuation.separator.key-value.mapping.yaml
+
+  property-body:
+    - meta_scope: meta.property.yaml
+
+    # --- yaml-esphome begin ---
+    - match: (?=!lambda)\s*
+      set: lambda-body
+    # --- yaml-esphome end ---
+
+    # &Anchor
+    # http://yaml.org/spec/1.2/spec.html#&%20anchor//
+    - match: (&)({{ns_anchor_name}})(\S+)?
+      captures:
+        1: keyword.control.property.anchor.yaml punctuation.definition.anchor.yaml
+        2: entity.name.other.anchor.yaml
+        3: invalid.illegal.character.anchor.yaml
+      pop: 1
+    # !Tag Handle
+    # http://yaml.org/spec/1.2/spec.html#tag/property/
+    - match: '{{c_ns_tag_property}}(?=\ |\t|$)'
+      scope: storage.type.tag-handle.yaml
+      pop: 1
+    - match: \S+
+      scope: invalid.illegal.tag-handle.yaml
+      pop: 1
+
+  # --- yaml-esphome begin ---
+  lambda-body:
+    - meta_include_prototype: false
+    - match: (!lambda)\s*
+      captures:
+        1: meta.property.yaml keyword.control.directive.tag.yaml
+    - include: block-scalar-lambda
+    - match: (["'])
+      pop: 1
+      embed: scope:source.c++
+      embed_scope: source.c++.embedded.yaml
+      escape: \1
+    - match: (?=[^\s]|$)
+      pop: 1
+      embed: scope:source.c++
+      embed_scope: source.c++.embedded.yaml
+      escape: $
+
+  block-scalar-lambda:
+    - match: (?:(\|)|(>))(?:([1-9])([-+])|([-+])?([1-9])?)  # c-b-block-header(m,t)
+      captures:
+        1: keyword.control.flow.block-scalar.literal.yaml
+        2: keyword.control.flow.block-scalar.folded.yaml
+        3: constant.numeric.indentation-indicator.yaml
+        4: storage.modifier.chomping-indicator.yaml
+        5: storage.modifier.chomping-indicator.yaml
+        6: constant.numeric.indentation-indicator.yaml
+      set: block-scalar-body-lambda
+
+  block-scalar-body-lambda:
+    - meta_include_prototype: false
+    - match: ^([ ]+)(?! )
+      pop: 1
+      embed: scope:source.c++
+      embed_scope: source.c++.embedded.yaml
+      escape: ^(?!\1|\s*$)
+    - match: ^(?=\S)  # the block is empty
+      pop: 1
+    - match: .+
+      scope: invalid.illegal.expected-comment-or-newline.yaml
+  # --- yaml-esphome end ---
