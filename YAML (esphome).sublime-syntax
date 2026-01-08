@@ -36,7 +36,15 @@ contexts:
     - meta_include_prototype: false
     - match: \!lambda\b
       scope: meta.property.yaml keyword.control.directive.tag.yaml
-    - include: block-scalar-lambda
+    - match: (?:(\|)|(>))(?:([1-9])([-+])|([-+])?([1-9])?)  # c-b-block-header(m,t)
+      captures:
+        1: keyword.control.flow.block-scalar.literal.yaml
+        2: keyword.control.flow.block-scalar.folded.yaml
+        3: constant.numeric.indentation-indicator.yaml
+        4: storage.modifier.chomping-indicator.yaml
+        5: storage.modifier.chomping-indicator.yaml
+        6: constant.numeric.indentation-indicator.yaml
+      set: lambda-block-scalar-body
     - match: (["'])
       pop: 1
       embed: scope:source.c++
@@ -48,18 +56,7 @@ contexts:
       embed_scope: source.c++.embedded.yaml
       escape: $
 
-  block-scalar-lambda:
-    - match: (?:(\|)|(>))(?:([1-9])([-+])|([-+])?([1-9])?)  # c-b-block-header(m,t)
-      captures:
-        1: keyword.control.flow.block-scalar.literal.yaml
-        2: keyword.control.flow.block-scalar.folded.yaml
-        3: constant.numeric.indentation-indicator.yaml
-        4: storage.modifier.chomping-indicator.yaml
-        5: storage.modifier.chomping-indicator.yaml
-        6: constant.numeric.indentation-indicator.yaml
-      set: block-scalar-body-lambda
-
-  block-scalar-body-lambda:
+  lambda-block-scalar-body:
     - meta_include_prototype: false
     - match: ^([ ]+)(?! )
       pop: 1
