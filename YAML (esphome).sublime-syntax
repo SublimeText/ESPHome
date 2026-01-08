@@ -45,11 +45,22 @@ contexts:
         5: storage.modifier.chomping-indicator.yaml
         6: constant.numeric.indentation-indicator.yaml
       set: lambda-block-scalar-body
-    - match: (["'])
+    - match: \"
+      scope: meta.string.yaml string.quoted.double.yaml punctuation.definition.string.begin.yaml
       pop: 1
       embed: scope:source.c++
-      embed_scope: source.c++.embedded.yaml
-      escape: \1
+      embed_scope: meta.string.yaml source.c++.embedded.yaml
+      escape: \"
+      escape_captures:
+        0: meta.string.yaml string.quoted.double.yaml punctuation.definition.string.end.yaml
+    - match: \'
+      scope: meta.string.yaml string.quoted.single.yaml punctuation.definition.string.begin.yaml
+      pop: 1
+      embed: scope:source.c++
+      embed_scope: meta.string.yaml source.c++.embedded.yaml
+      escape: \'
+      escape_captures:
+        0: meta.string.yaml string.quoted.single.yaml punctuation.definition.string.end.yaml
     - match: (?=\S)
       pop: 1
       embed: scope:source.c++
