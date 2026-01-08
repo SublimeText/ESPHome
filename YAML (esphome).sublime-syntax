@@ -6,9 +6,6 @@
 #
 # Notes:
 # - Single and double-quoted "lambda" keys are not supported.
-# - Code between "yaml-esphome begin" and "yaml-esphome end" tags are additions
-#   relative to the orignal YAML syntax. The rest of the code is copied from
-#   YAML syntax.
 ---
 # http://www.sublimetext.com/docs/syntax.html
 name: YAML (esphome)
@@ -31,7 +28,6 @@ contexts:
     - match: (?=!lambda\b)
       set: lambda-body
 
-  # --- yaml-esphome begin ---
   lambda-body:
     - meta_include_prototype: false
     - match: \!lambda\b
@@ -80,4 +76,3 @@ contexts:
       pop: 1
     - match: .+
       scope: invalid.illegal.expected-comment-or-newline.yaml
-  # --- yaml-esphome end ---
