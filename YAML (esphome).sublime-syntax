@@ -50,11 +50,13 @@ contexts:
       embed: scope:source.c++
       embed_scope: source.c++.embedded.yaml
       escape: \1
-    - match: (?=[^\s]|$)
+    - match: (?=\S)
       pop: 1
       embed: scope:source.c++
-      embed_scope: source.c++.embedded.yaml
+      embed_scope: meta.string.yaml source.c++.embedded.yaml
       escape: $
+    - match: $
+      pop: 1
 
   lambda-block-scalar-body:
     - meta_include_prototype: false
