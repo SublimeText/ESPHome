@@ -27,29 +27,9 @@ contexts:
       push: lambda-body
 
   property-body:
-    - meta_scope: meta.property.yaml
-
-    # --- yaml-esphome begin ---
-    - match: (?=!lambda)\s*
+    - meta_prepend: true
+    - match: (?=!lambda\b)
       set: lambda-body
-    # --- yaml-esphome end ---
-
-    # &Anchor
-    # http://yaml.org/spec/1.2/spec.html#&%20anchor//
-    - match: (&)({{ns_anchor_name}})(\S+)?
-      captures:
-        1: keyword.control.property.anchor.yaml punctuation.definition.anchor.yaml
-        2: entity.name.other.anchor.yaml
-        3: invalid.illegal.character.anchor.yaml
-      pop: 1
-    # !Tag Handle
-    # http://yaml.org/spec/1.2/spec.html#tag/property/
-    - match: '{{c_ns_tag_property}}(?=\ |\t|$)'
-      scope: storage.type.tag-handle.yaml
-      pop: 1
-    - match: \S+
-      scope: invalid.illegal.tag-handle.yaml
-      pop: 1
 
   # --- yaml-esphome begin ---
   lambda-body:
