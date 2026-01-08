@@ -34,9 +34,8 @@ contexts:
   # --- yaml-esphome begin ---
   lambda-body:
     - meta_include_prototype: false
-    - match: (!lambda)\s*
-      captures:
-        1: meta.property.yaml keyword.control.directive.tag.yaml
+    - match: \!lambda\b
+      scope: meta.property.yaml keyword.control.directive.tag.yaml
     - include: block-scalar-lambda
     - match: (["'])
       pop: 1
