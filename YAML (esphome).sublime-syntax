@@ -19,25 +19,12 @@ extends: Packages/YAML/YAML.sublime-syntax
 
 contexts:
   block-pair:
-    - match: ( *)(\?)(?=\s)
-      captures:
-        2: meta.mapping.yaml punctuation.definition.key-value.begin.yaml
-      push: block-key-explicit
-
-    # --- yaml-esphome begin ---
+    - meta_prepend: true
     - match: (lambda)\s*(:)(?=\s+|$)
       captures:
         1: meta.mapping.key.yaml meta.string.yaml string.unquoted.plain.out.yaml
         2: meta.mapping.yaml punctuation.separator.key-value.mapping.yaml
       push: lambda-body
-    # --- yaml-esphome end ---
-
-    # Attempt to match plain-out scalars and highlight as "meta.mapping.key",
-    # if followed by a colon
-    - match: '{{_flow_key_out_lookahead}}'
-      push: block-key-implicit
-    - match: :(?=\s)
-      scope: meta.mapping.yaml punctuation.separator.key-value.mapping.yaml
 
   property-body:
     - meta_scope: meta.property.yaml
