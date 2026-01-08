@@ -12,7 +12,7 @@
 ---
 # http://www.sublimetext.com/docs/syntax.html
 name: YAML (esphome)
-scope: source.yaml-esphome
+scope: source.yaml.esphome
 version: 2
 
 extends: Packages/YAML/YAML.sublime-syntax
