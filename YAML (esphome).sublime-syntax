@@ -70,7 +70,7 @@ contexts:
     - match: ^([ ]+)(?! )
       pop: 1
       embed: scope:source.c++
-      embed_scope: source.c++.embedded.yaml
+      embed_scope: meta.string.yaml source.c++.embedded.yaml
       escape: ^(?!\1|\s*$)
     - match: ^(?=\S)  # the block is empty
       pop: 1
