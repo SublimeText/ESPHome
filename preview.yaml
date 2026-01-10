@@ -1,0 +1,28 @@
+esphome:
+  name: tinypico-plant-2
+  friendly_name: tinypico-plant-2
+
+esp32:
+  board: tinypico
+
+sensor:
+  # derive battery percentage 3300mV=0%, 3950mV=100%
+  - platform: template
+    lambda: |-
+      float x = id(vbatt).state;
+      if (x < 3300) {
+        x = 3300;
+      }
+      if (x > 3950) {
+        x = 3950;
+      }
+      float y = (x - 3300) / 650 * 100;
+      return y;
+    name: "Battery Percentage"
+    id: "pbatt"
+    update_interval: never
+    unit_of_measurement: "%"
+    device_class: "battery"
+    state_class: "measurement"
+    icon: "mdi:battery"
+    accuracy_decimals: 0

@@ -1,0 +1,78 @@
+%YAML 1.2
+# Extends built-in YAML syntax with support for embedded c++ blocks.
+# The blocks can either be specified using a "lambda" key or "!lambda" tag.
+# See https://esphome.io/guides/yaml/ and https://esphome.io/automations/templates/#config-lambda
+# for more details.
+#
+# Notes:
+# - Single and double-quoted "lambda" keys are not supported.
+---
+# http://www.sublimetext.com/docs/syntax.html
+name: YAML (esphome)
+scope: source.yaml.esphome
+version: 2
+
+extends: Packages/YAML/YAML.sublime-syntax
+
+contexts:
+  block-pair:
+    - meta_prepend: true
+    - match: (lambda)\s*(:)(?=\s+|$)
+      captures:
+        1: meta.mapping.key.yaml meta.string.yaml string.unquoted.plain.out.yaml
+        2: meta.mapping.yaml punctuation.separator.key-value.mapping.yaml
+      push: lambda-body
+
+  property-body:
+    - meta_prepend: true
+    - match: (?=!lambda\b)
+      set: lambda-body
+
+  lambda-body:
+    - meta_include_prototype: false
+    - match: \!lambda\b
+      scope: meta.property.yaml keyword.control.directive.tag.yaml
+    - match: (?:(\|)|(>))(?:([1-9])([-+])|([-+])?([1-9])?)  # c-b-block-header(m,t)
+      captures:
+        1: keyword.control.flow.block-scalar.literal.yaml
+        2: keyword.control.flow.block-scalar.folded.yaml
+        3: constant.numeric.indentation-indicator.yaml
+        4: storage.modifier.chomping-indicator.yaml
+        5: storage.modifier.chomping-indicator.yaml
+        6: constant.numeric.indentation-indicator.yaml
+      set: lambda-block-scalar-body
+    - match: \"
+      scope: meta.string.yaml string.quoted.double.yaml punctuation.definition.string.begin.yaml
+      pop: 1
+      embed: scope:source.c++#statements
+      embed_scope: meta.string.yaml source.c++.embedded.yaml
+      escape: \"
+      escape_captures:
+        0: meta.string.yaml string.quoted.double.yaml punctuation.definition.string.end.yaml
+    - match: \'
+      scope: meta.string.yaml string.quoted.single.yaml punctuation.definition.string.begin.yaml
+      pop: 1
+      embed: scope:source.c++#statements
+      embed_scope: meta.string.yaml source.c++.embedded.yaml
+      escape: \'
+      escape_captures:
+        0: meta.string.yaml string.quoted.single.yaml punctuation.definition.string.end.yaml
+    - match: (?=\S)
+      pop: 1
+      embed: scope:source.c++#statements
+      embed_scope: meta.string.yaml source.c++.embedded.yaml
+      escape: $
+    - match: $
+      pop: 1
+
+  lambda-block-scalar-body:
+    - meta_include_prototype: false
+    - match: ^([ ]+)(?! )
+      pop: 1
+      embed: scope:source.c++#statements
+      embed_scope: meta.string.yaml source.c++.embedded.yaml
+      escape: ^(?!\1|\s*$)
+    - match: ^(?=\S)  # the block is empty
+      pop: 1
+    - match: .+
+      scope: invalid.illegal.expected-comment-or-newline.yaml
