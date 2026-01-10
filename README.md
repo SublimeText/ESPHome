@@ -1,8 +1,34 @@
-# ESPHome
+# <img src="https://avatars.githubusercontent.com/u/45919759" height="32pt"> ESPHome
 
-ESPHome YAML configuration file syntax.
+[ESPHome YAML configuration file](https://esphome.io/guides/yaml/) syntax for [Sublime Text](https://www.sublimetext.com) based on its YAML syntax.
 
-See [ESPHome YAML configuration documentation](https://esphome.io/guides/yaml/).
+![preview](preview.png)
+
+## Installation
+
+### Package Control
+
+The easiest way to install is using [Package Control](https://packagecontrol.io). It's listed as `ESPHome`.
+
+1. Open `Command Palette` using <kbd>ctrl+shift+P</kbd> or menu item `Tools → Command Palette...`
+2. Choose `Package Control: Install Package`
+3. Find `ESPHome` and hit <kbd>Enter</kbd>
+
+### Manual Install
+
+1. Download appropriate [ESPHome.sublime-package](https://github.com/SublimeText/ESPHome/releases) for your Sublime Text build.
+2. Copy it into _Installed Packages_ directory
+
+> [!NOTE]
+>
+> To find _Installed Packages_...
+>
+> 1. call _Menu > Preferences > Browse Packages.._
+> 2. Navigate to parent folder
+
+> [!WARNING]
+>
+> Manually installed packages are not automatically updated by Package Control.
 
 ## Usage
 
