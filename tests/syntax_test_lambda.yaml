@@ -9,28 +9,34 @@ lambda: return id(uri) == "";
 #^^^^^ meta.mapping.key meta.string string.unquoted.plain.out
 #      ^ - source.c++
 #       ^^^^^^^^^^^^^^^^^^^^^ meta.string.yaml source.c++
+#       ^^^^^^ keyword.control
 
 lambda: 'return id(uri) == "";'
 # <- meta.mapping.key meta.string string.unquoted.plain.out
 #^^^^^ meta.mapping.key meta.string string.unquoted.plain.out
-#      ^^ - source.c++
-#        ^^^^^^^^^^^^^^^^^^^^^ source.c++
-#                             ^ - source.c++
+#      ^ - source.c++
 #       ^^^^^^^^^^^^^^^^^^^^^^^ meta.string.yaml
+#       ^ string.quoted.single.yaml punctuation.definition.string.begin.yaml - source.c++
+#        ^^^^^^^^^^^^^^^^^^^^^ source.c++
+#        ^^^^^^ keyword.control
+#                             ^ string.quoted.single.yaml punctuation.definition.string.end.yaml - source.c++
 
 lambda: "return id(uri);"
 # <- meta.mapping.key meta.string string.unquoted.plain.out
 #^^^^^ meta.mapping.key meta.string string.unquoted.plain.out
-#      ^^ - source.c++
-#        ^^^^^^^^^^^^^^^ source.c++
-#                       ^ - source.c++
+#      ^ - source.c++
 #       ^^^^^^^^^^^^^^^^^ meta.string.yaml
+#       ^ string.quoted.double.yaml punctuation.definition.string.begin.yaml - source.c++
+#        ^^^^^^^^^^^^^^^ source.c++
+#        ^^^^^^ keyword.control
+#                       ^ string.quoted.double.yaml punctuation.definition.string.end.yaml - source.c++
 
 lambda: |-
   #     ^ keyword.control.flow.block-scalar.literal
   #      ^ storage.modifier.chomping-indicator
    return id(uri);
   #^^^^^^^^^^^^^^^ meta.string.yaml source.c++
+  #^^^^^^ keyword.control
 foo: 1
 # <- - source.c++
 
@@ -39,30 +45,38 @@ foo: 1
 
 foo: !lambda return id(uri)
 #    ^^^^^^^ meta.property keyword.control.directive.tag
+#           ^ - source.c++
 #            ^^^^^^^^^^^^^^ meta.string.yaml source.c++
+#            ^^^^^^ keyword.control
+#                          ^ - source.c++
 
 foo: !lambda 'return id(uri)'
 #    ^^^^^^^ meta.property keyword.control.directive.tag
-#            ^ - source.c++
-#             ^^^^^^^^^^^^^^ source.c++
-#                           ^ - source.c++
+#           ^ - source.c++
 #            ^^^^^^^^^^^^^^^^ meta.string.yaml
+#            ^ string.quoted.single.yaml punctuation.definition.string.begin.yaml - source.c++
+#             ^^^^^^^^^^^^^^ source.c++
+#             ^^^^^^ keyword.control
+#                           ^ string.quoted.single.yaml punctuation.definition.string.end.yaml - source.c++
 
 foo: !lambda "return id(uri)"
 #    ^^^^^^^ meta.property keyword.control.directive.tag
-#            ^ - source.c++
-#             ^^^^^^^^^^^^^^ source.c++
-#                           ^ - source.c++
+#           ^ - source.c++
 #            ^^^^^^^^^^^^^^^^ meta.string.yaml
+#            ^ string.quoted.double.yaml punctuation.definition.string.begin.yaml - source.c++
+#             ^^^^^^^^^^^^^^ source.c++
+#             ^^^^^^ keyword.control
+#                           ^ string.quoted.double.yaml punctuation.definition.string.end.yaml - source.c++
 
 foo: !lambda |-
   #  ^^^^^^^ meta.property keyword.control.directive.tag
   #          ^ keyword.control.flow.block-scalar.literal
   #           ^ storage.modifier.chomping-indicator
    const id = id(uri);
-  #^^^^^^^^^^^^^^^^^^^ source.c++
+  #^^^^^^^^^^^^^^^^^^^ meta.string.yaml source.c++
    return id;
-  #^^^^^^^^^^ source.c++
+  #^^^^^^^^^^ meta.string.yaml source.c++
+#  ^^^^^^ keyword.control
 foo: 1
 # <- - source.c++
 
@@ -75,24 +89,29 @@ lambda: !lambda return id(uri);
 
 lambda: !lambda "return id(uri);"
 #       ^^^^^^^ meta.property keyword.control.directive.tag
-#               ^ - source.c++
-#                ^^^^^^^^^^^^^^^ source.c++
-#                               ^ - source.c++
+#              ^ - source.c++
 #               ^^^^^^^^^^^^^^^^^ meta.string.yaml
+#               ^ string.quoted.double.yaml punctuation.definition.string.begin.yaml - source.c++
+#                ^^^^^^^^^^^^^^^ source.c++
+#                ^^^^^^ keyword.control
+#                               ^ string.quoted.double.yaml punctuation.definition.string.end.yaml - source.c++
 
 lambda: !lambda 'return id(uri);'
 #       ^^^^^^^ meta.property keyword.control.directive.tag
-#               ^ - source.c++
-#                ^^^^^^^^^^^^^^^ source.c++
-#                               ^ - source.c++
+#              ^ - source.c++
 #               ^^^^^^^^^^^^^^^^^ meta.string.yaml
+#               ^ string.quoted.single.yaml punctuation.definition.string.begin.yaml - source.c++
+#                ^^^^^^^^^^^^^^^ source.c++
+#                ^^^^^^ keyword.control
+#                               ^ string.quoted.single.yaml punctuation.definition.string.end.yaml - source.c++
 
 lambda: !lambda |-
   #     ^^^^^^^ meta.property keyword.control.directive.tag
   #             ^ keyword.control.flow.block-scalar.literal
   #              ^ storage.modifier.chomping-indicator
    return id(uri);
-  #^^^^^^^^^^^^^^^ source.c++
+  #^^^^^^^^^^^^^^^ meta.string.yaml source.c++
+  #^^^^^^ keyword.control
 foo: 1
 # <- - source.c++
 
