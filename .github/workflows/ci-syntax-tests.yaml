@@ -29,6 +29,8 @@ jobs:
     strategy:
       matrix:
         include:
+          - build: 4143
+            default_packages: v4143
           - build: 4180
             default_packages: v4180
           - build: 4200
@@ -37,7 +39,7 @@ jobs:
             default_packages: master
     steps:
       - name: Checkout Default Packages
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: sublimehq/Packages
           ref: ${{ matrix.default_packages }}
@@ -48,7 +50,7 @@ jobs:
           find st_syntax_tests/Data/Packages/*/ -type f -name 'syntax_test*' -exec rm -v '{}' \;
 
       - name: Checkout ESPHome
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           path: st_syntax_tests/Data/Packages/ESPHome
 
