@@ -1,4 +1,4 @@
-# <img src="https://avatars.githubusercontent.com/u/45919759" height="32pt"> ESPHome
+# <img src="https://avatars.githubusercontent.com/u/45919759" height="32" width="32"> ESPHome
 
 [ESPHome YAML configuration file](https://esphome.io/guides/yaml/) syntax for [Sublime Text](https://www.sublimetext.com) based on its YAML syntax.
 
